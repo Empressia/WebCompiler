@@ -95,14 +95,17 @@ namespace WebCompiler
                     ProcessStartInfo start = new ProcessStartInfo
                     {
                         WorkingDirectory = _path,
-                        CreateNoWindow = true,
+						UseShellExecute = false,
+						CreateNoWindow = true,
                         WindowStyle = ProcessWindowStyle.Hidden,
                         FileName = "cmd.exe",
-                        Arguments = "/c prepare.cmd"
-                    };
+                        Arguments = "/c prepare.cmd",
+						RedirectStandardOutput = true,
+					};
 
                     Process p = Process.Start(start);
-                    p.WaitForExit();
+					p.StandardOutput.ReadToEnd();
+					p.WaitForExit();
 
                     // If this file is written, then the initialization was successful.
                     File.WriteAllText(log_file, DateTime.Now.ToLongDateString());
